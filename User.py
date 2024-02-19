@@ -1,4 +1,3 @@
-from enum import Enum
 from TextPost import TextPost
 from ImagePost import ImagePost
 from SalePost import SalePost
@@ -11,7 +10,7 @@ class User:
         self.following = set()
         self.followers = set()
         self.is_online = True
-        self.posts = []  # needed?
+        self.posts = []
         self.notifications = []
 
     def follow(self, user):
@@ -19,12 +18,16 @@ class User:
             self.following.add(user)
             user.followers.add(self)
             print(self.username + " started following " + user.username)
+        else:
+            print(user.username + " is not online")
 
     def unfollow(self, user):
         if user.is_online:
             self.following.remove(user)
             user.followers.remove(self)
             print(self.username + " unfollowed " + user.username)
+        else:
+            print(user.username + " is not online")
 
     def print_notifications(self):
         print(self.username + "'s notifications:")
@@ -34,6 +37,8 @@ class User:
     def log_out(self):
         if self.is_online:
             self.is_online = False
+        else:
+            print(self.username + " is already offline")
 
     def publish_post(self, post_type, content, price=None, location=None):
         if self.is_online:
@@ -62,8 +67,3 @@ def create_post(owner, post_type, content=None, price=None, location=None):
     else:
         return None
 
-
-class PostType(Enum):  # needed?
-    TEXT = "Text"
-    IMAGE = "Image"
-    SALE = "Sale"

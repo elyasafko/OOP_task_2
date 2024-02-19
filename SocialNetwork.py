@@ -20,9 +20,11 @@ class SocialNetwork:
     def sign_up(self, username, password):
         # Check if the username is already taken
         if self.get_user(username):
+            print("username already taken")
             return None
         # Check if the password is valid
         if len(password) < 4 or len(password) > 8:
+            print("password must be between 4 and 8 characters")
             return None
         # Create a new user
         user = User(username, password)
@@ -40,10 +42,13 @@ class SocialNetwork:
         if user and user.password == password:
             user.is_online = True
             print(username + " connected")
+        else:
+            print("incorrect username or password")
 
     def log_out(self, username):
         user = self.get_user(username)
         if user is None:
+            print("username not found")
             return
         user.log_out()
         print(username + " disconnected")
