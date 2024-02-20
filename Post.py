@@ -24,5 +24,3 @@ class Post:
                 self.owner.notifications.append(user.username + " commented on your post")
                 print("notification to " + self.owner.username + ": " + user.username + " commented on your post: " + text)
 
-    def display(self):
-        pass
