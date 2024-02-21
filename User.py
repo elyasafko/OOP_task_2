@@ -16,7 +16,7 @@ class User:
     def follow(self, user):
         if user.is_online:
             self.following.add(user)
-            user.followers.add(self)
+            user.add_observer(self)
             print(self.username + " started following " + user.username)
         else:
             print(user.username + " is not online")
@@ -24,10 +24,34 @@ class User:
     def unfollow(self, user):
         if user.is_online:
             self.following.remove(user)
-            user.followers.remove(self)
+            user.remove_observer(self)
             print(self.username + " unfollowed " + user.username)
         else:
             print(user.username + " is not online")
+
+    def add_observer(self, observer):
+        self.followers.add(observer)
+
+    def remove_observer(self, observer):
+        self.followers.remove(observer)
+
+    """
+    here we use the observer pattern to notify the followers when a new post is published
+    """
+    def notify_observers(self):
+        for observer in self.followers:
+            observer.update(self.username + " has a new post")
+
+    def update(self, notification):
+        self.notifications.append(notification)
+
+    def publish_post(self, post_type, content, price=None, location=None):
+        if self.is_online:
+            post = create_post(self, post_type, content, price, location)
+            self.posts.append(post)
+            print(post)
+            self.notify_observers()
+            return post
 
     def print_notifications(self):
         print(self.username + "'s notifications:")
@@ -39,18 +63,6 @@ class User:
             self.is_online = False
         else:
             print(self.username + " is already offline")
-
-    def publish_post(self, post_type, content, price=None, location=None):
-        if self.is_online:
-            post = create_post(self, post_type, content, price, location)
-            self.posts.append(post)
-            print(post)
-            """
-            Observers pattern: notify all followers about the new post
-            """
-            for user in self.followers:
-                user.notifications.append(self.username + " has a new post")
-            return post
 
     def __str__(self):
         return "User name: " + self.username + ", Number of posts: " + str(
@@ -66,4 +78,3 @@ def create_post(owner, post_type, content=None, price=None, location=None):
         return SalePost(owner, content, price, location)
     else:
         return None
-
