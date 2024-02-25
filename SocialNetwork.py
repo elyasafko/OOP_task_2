@@ -39,7 +39,7 @@ class SocialNetwork:
 
     def log_in(self, username, password):
         user = self.get_user(username)
-        if user and user.password == password:
+        if user and user.equal_password(password):
             user.is_online = True
             print(username + " connected")
         else:

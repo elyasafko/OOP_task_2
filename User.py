@@ -6,16 +6,16 @@ from SalePost import SalePost
 class User:
     def __init__(self, username, password):
         self.username = username
-        self.password = password
-        self.following = set()
-        self.followers = set()
+        self.__password = password
+        self.__following = set()
+        self.__followers = set()  # this is the observer list
         self.is_online = True
-        self.posts = []
+        self.__posts = []
         self.notifications = []
 
     def follow(self, user):
         if user.is_online:
-            self.following.add(user)
+            self.__following.add(user)
             user.add_observer(self)
             print(self.username + " started following " + user.username)
         else:
@@ -23,23 +23,24 @@ class User:
 
     def unfollow(self, user):
         if user.is_online:
-            self.following.remove(user)
+            self.__following.remove(user)
             user.remove_observer(self)
             print(self.username + " unfollowed " + user.username)
         else:
             print(user.username + " is not online")
 
     def add_observer(self, observer):
-        self.followers.add(observer)
+        self.__followers.add(observer)
 
     def remove_observer(self, observer):
-        self.followers.remove(observer)
+        self.__followers.remove(observer)
 
     """
     here we use the observer pattern to notify the followers when a new post is published
     """
+
     def notify_observers(self):
-        for observer in self.followers:
+        for observer in self.__followers:
             observer.update(self.username + " has a new post")
 
     def update(self, notification):
@@ -48,7 +49,7 @@ class User:
     def publish_post(self, post_type, content, price=None, location=None):
         if self.is_online:
             post = create_post(self, post_type, content, price, location)
-            self.posts.append(post)
+            self.__posts.append(post)
             print(post)
             self.notify_observers()
             return post
@@ -66,7 +67,18 @@ class User:
 
     def __str__(self):
         return "User name: " + self.username + ", Number of posts: " + str(
-            len(self.posts)) + ", Number of followers: " + str(len(self.followers))
+            len(self.__posts)) + ", Number of followers: " + str(len(self.__followers))
+
+    def equal_password(self, password):
+        if password == self.__password:
+            return True
+        else:
+            return False
+
+
+"""
+here we use the factory pattern to create the different types of posts
+"""
 
 
 def create_post(owner, post_type, content=None, price=None, location=None):

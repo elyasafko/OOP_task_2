@@ -9,10 +9,10 @@ class ImagePost(Post):
         super().__init__(owner, picture_path)
 
     def display(self):
-        img = mpimg.imread(self.content)
+        img = mpimg.imread(self._content)
         plt.imshow(img)
         plt.show()
         print("Shows picture")
 
     def __str__(self):
-        return self.owner.username + " posted a picture" + "\n"
+        return self._owner.username + " posted a picture" + "\n"

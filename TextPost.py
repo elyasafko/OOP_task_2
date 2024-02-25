@@ -6,4 +6,4 @@ class TextPost(Post):
         super().__init__(owner, content)
 
     def __str__(self):
-        return self.owner.username + " published a post:\n" + '"' + self.content + '"' + "\n"
+        return self._owner.username + " published a post:\n" + '"' + self._content + '"' + "\n"

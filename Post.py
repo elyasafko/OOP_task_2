@@ -1,26 +1,27 @@
 from comment import Comment
+from abc import ABC, abstractmethod
 
 
-class Post:
+class Post(ABC):
 
     def __init__(self, owner, content):
-        self.owner = owner
-        self.content = content
-        self.likes = set()
-        self.comments = []
+        self._owner = owner
+        self._content = content
+        self._likes = set()
+        self._comments = []
 
     def like(self, user):
         if user.is_online:
-            self.likes.add(user)
-            if user != self.owner:
-                self.owner.notifications.append(user.username + " liked your post")
-                print("notification to " + self.owner.username + ": " + user.username + " liked your post")
+            self._likes.add(user)
+            if user != self._owner:
+                self._owner.notifications.append(user.username + " liked your post")
+                print("notification to " + self._owner.username + ": " + user.username + " liked your post")
 
     def comment(self, user, text):
         if user.is_online:
             comm = Comment(self, user, text)
-            self.comments.append(comm)
-            if user != self.owner:
-                self.owner.notifications.append(user.username + " commented on your post")
-                print("notification to " + self.owner.username + ": " + user.username + " commented on your post: " + text)
-
+            self._comments.append(comm)
+            if user != self._owner:
+                self._owner.notifications.append(user.username + " commented on your post")
+                print(
+                    "notification to " + self._owner.username + ": " + user.username + " commented on your post: " + text)
