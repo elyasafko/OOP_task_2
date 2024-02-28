@@ -14,16 +14,18 @@ class SalePost(Post):
         # need a work
 
     def sold(self, password):
-        if self._owner.equal_password(password):
-            self.__is_sold = True
-            print(self._owner.username + "'s" + " product is sold")
-        else:
-            print("Incorrect password")
+        if self._owner.is_online:
+            if self._owner.equal_password(password):
+                self.__is_sold = True
+                print(self._owner.username + "'s" + " product is sold")
+            else:
+                print("Incorrect password")
 
     def discount(self, percent, password):
-        if self._owner.equal_password(password):
-            self.__price = self.__price - self.__price * percent / 100
-            print("Discount on " + self._owner.username + " product! the new price is: " + str(self.__price))
+        if self._owner.is_online:
+            if self._owner.equal_password(password):
+                self.__price = self.__price - self.__price * percent / 100
+                print("Discount on " + self._owner.username + " product! the new price is: " + str(self.__price))
 
     def __str__(self):
         if self.__is_sold:
